@@ -1,13 +1,13 @@
 import express from 'express'
 import cors from 'cors'
-
+import { mongoUri } from './mongo_uri'
 import { MongoClient, ObjectId } from 'mongodb'
 
 const app = express()
 app.use(cors())
 app.use(express.json())
 
-const client = new MongoClient('mongodb+srv://erickv363:erickv123@cluster0.hr1r2zw.mongodb.net/')
+const client = new MongoClient(mongoUri)
 const db = client.db('blog')
 const posts = db.collection('posts')
 
