@@ -1,13 +1,14 @@
 import express from 'express'
 import cors from 'cors'
-import { mongoUri } from './mongo_uri'
 import { MongoClient, ObjectId } from 'mongodb'
+import 'dotenv/config'
 
 const app = express()
 app.use(cors())
 app.use(express.json())
 
-const client = new MongoClient(mongoUri)
+const client = new MongoClient(process.uri.MONGOURI)
+const port = process.env.PORT
 const db = client.db('blog')
 const posts = db.collection('posts')
 
@@ -33,4 +34,4 @@ app.delete('/', (req, res) => {
     res.send('Im deleting')
 })
 
-app.listen(4000, () => console.log('Im running on 4000'))
+app.listen(4040, () => console.log('Im running on 4040'))
