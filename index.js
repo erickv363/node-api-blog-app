@@ -9,7 +9,7 @@ app.use(cors())
 app.use(express.json())
 
 const client = new MongoClient(URI)
-const PORT = process.env.PORT
+const PORT = process.env.PORT || 4040
 const db = client.db("blog")
 const posts = db.collection("posts")
 
