@@ -13,7 +13,13 @@ const PORT = process.env.PORT
 const db = client.db("blog")
 const posts = db.collection("posts")
 
-// API ENDPOINT to route to a single post
+// API ENDPOINT to 'Home' - to show all the posts
+app.get("/", async (req, res) => {
+  const allPosts = await posts.find().toArray()
+  res.send(allPosts)
+})
+
+// API ENDPOINT to route to a single post using the id(most commonly used since its unique), the ':' makes it dynamic
 app.get("/single-post/:id", async (req, res) => {
   //
   const specialId = new ObjectId(req.params.id)
@@ -29,13 +35,7 @@ app.get("/single-post/:id", async (req, res) => {
   res.send(singlePost)
 })
 
-// API ENDPOINT to Home - to show all the posts
-app.get("/", async (req, res) => {
-  const allPosts = await posts.find().toArray()
-  res.send(allPosts)
-})
-
-// ENDPOINT to Update posts
+// ENDPOINT to Add a single post
 app.post("/", async (req, res) => {
   console.log(req.body)
 
@@ -43,20 +43,21 @@ app.post("/", async (req, res) => {
   res.send(addPost)
 })
 
+//ENDPOINT to update a single post
 app.patch("/", async (req, res) => {
-  const id = new ObjectId(req.body._id)
+//   const id = new ObjectId(req.body._id)
 
-  const patchPost = await posts.findOneAndUpdate(
-    { _id: id },
-    { $set: req.body }
-  )
+  const patchPost = await posts.findOneAndUpdate(req.query, {$set: req.body})
   res.send(patchPost)
 })
 
-app.delete("/", async (req, res) => {
-  const id = new ObjectId(req.body._id)
-
-  const deletPost = await posts.findOneAndDelete({ _id: id })
+//ENDPOINT to delete a single post
+app.delete("/single-post/:id", async (req, res) => {
+  const id = new ObjectId(req.params.id)
+  console.log(req.params)
+  console.log(id)
+  
+  const deletPost = await posts.findOneAndDelete({_id: id})
   res.send(deletPost)
 })
 
